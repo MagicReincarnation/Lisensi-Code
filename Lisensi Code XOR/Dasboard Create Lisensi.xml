@@ -1,0 +1,37 @@
+<h2>License Generator</h2>
+  <label for="blogIdInput_hr">Blog ID:</label>
+  <input type="text" id="blogIdInput_hr" placeholder="Masukkan Blog ID">
+  <label for="passwordInput_hr">Kata Sandi:</label>
+  <input type="text" id="passwordInput_hr" placeholder="Masukkan Kata Sandi">
+  <button onclick="generateLicense_hr()">Generate License</button>
+  <p>Lisensi: <span id="licenseOutput_hr"></span></p>
+
+  <script>
+    function encrypt_hr(blogId, password) {
+      let encrypted = '';
+      for (let i = 0; i < blogId.length; i++) {
+        encrypted += String.fromCharCode(blogId.charCodeAt(i) ^ password.charCodeAt(i % password.length));
+      }
+      return btoa(encrypted);
+    }
+    function decrypt_hr(encrypted, password) {
+      const decoded = atob(encrypted);
+      let decrypted = '';
+      for (let i = 0; i < decoded.length; i++) {
+        decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ password.charCodeAt(i % password.length));
+      }
+      return decrypted;
+    }
+    function generateLicense_hr() {
+      const blogId_hr = document.getElementById('blogIdInput_hr').value;
+      const password_hr = document.getElementById('passwordInput_hr').value;
+      if (blogId_hr && password_hr) {
+        const encryptedBlogId_hr = encrypt_hr(blogId_hr, password_hr);
+        document.getElementById('licenseOutput_hr').textContent = encryptedBlogId_hr;
+      } else {
+        document.getElementById('licenseOutput_hr').textContent = 'Masukkan Blog ID dan Kata Sandi terlebih dahulu.';
+      }
+    }
+  </script>
+  
+  
