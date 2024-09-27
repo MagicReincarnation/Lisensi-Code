@@ -12,17 +12,9 @@
 
   // Array dengan data lisensi
   const lisensi_hr = [
-    {
-      blogId: '123456789',
-      lisensi: 'Lisensi Terenkripsi', // Ganti dengan lisensi terenkripsi
+     { 
       ownerLisensi: 'Hirutshuji',
-      password: 'Kata Sandi' // Ganti dengan kata sandi lisensi
-    },
-    {
-      blogId: '123456789',
-      lisensi: 'Lisensi Terenkripsi', // Ganti dengan lisensi 
-      ownerLisensi: 'Hirutshuji',
-      password: 'Kata Sandi' // Ganti dengan kata sandi lisensi
+      lisensi: 'AQMBBwEDBwU=' // Ganti dengan lisensi terenkripsi
     }
   ];
   
@@ -34,6 +26,8 @@
 ```Javascript
 <script>
 /*<![CDATA[*/
+const lisensi_hr_password = "123456";// password lisensi disini
+
   function decrypt_hr(encrypted, password) {
     const decoded = atob(encrypted);
     let decrypted = '';
@@ -42,13 +36,15 @@
     }
     return decrypted;
   }
+  
   function checkLisensi_hr(blogId) {
     for (let i = 0; i < lisensi_hr.length; i++) {
-      if (lisensi_hr[i].ownerLisensi !== 'Hirurshuji') {
+      if (lisensi_hr[i].ownerLisensi !== 'Hirutshuji') {
         console.log("Owner lisensi tidak terdaftar.");
         continue;
       }
-      const decryptedBlogId_hr = decrypt_hr(lisensi_hr[i].lisensi, lisensi_hr[i].password);
+      
+      const decryptedBlogId_hr = decrypt_hr(lisensi_hr[i].lisensi, lisensi_hr_password);
       if (blogId === decryptedBlogId_hr) {
         console.log("lisensi terdaftar.");
         // Lakukan sesuatu jika lisensi benar, misal jalankan kodenya
@@ -56,7 +52,7 @@
         return true;
       }
     }
-    console.log("lisensi tidak terdaftar atau owner lisensi tidak valid.");
+    console.log("lisensi tidak terdaftar");
     // Lakukan sesuatu jika lisensi salah, misal redirect ke blog kamu 
     
     return false;
