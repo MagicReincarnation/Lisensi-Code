@@ -5,65 +5,68 @@
 <p>kode lisensi yang dienkripsi dan dekripsi `Lisensi` menggunakan kata sandi, dan memakai blogId sebagai persamaannya, aku menggunakan metode sederhana berbasis XOR dengan kata sandi.
 </p>
 
-<pre><code class="javascript">
-&lt;script&gt;
+```Javascript
+<script>
   // Mendapatkan Blog ID secara dinamis
-  const cur_blog_id_hr = &#039;&lt;data:blog.blogId/&gt;&#039;;
+  const cur_blog_id_hr = '<data:blog.blogId/>';
 
   // Array dengan data lisensi
   const lisensi_hr = [
     {
-      blogId: &#039;123456789&#039;,
-      lisensi: &#039;Lisensi Terenkripsi&#039;, // Ganti dengan lisensi terenkripsi
-      ownerLisensi: &#039;Hirutshuji&#039;,
-      password: &#039;Kata Sandi&#039; // Ganti dengan kata sandi lisensi
+      blogId: '123456789',
+      lisensi: 'Lisensi Terenkripsi', // Ganti dengan lisensi terenkripsi
+      ownerLisensi: 'Hirutshuji',
+      password: 'Kata Sandi' // Ganti dengan kata sandi lisensi
     },
     {
-      blogId: &#039;123456789&#039;,
-      lisensi: &#039;Lisensi Terenkripsi&#039;, // Ganti dengan lisensi 
-      ownerLisensi: &#039;Hirutshuji&#039;,
-      password: &#039;Kata Sandi&#039; // Ganti dengan kata sandi lisensi
+      blogId: '123456789',
+      lisensi: 'Lisensi Terenkripsi', // Ganti dengan lisensi 
+      ownerLisensi: 'Hirutshuji',
+      password: 'Kata Sandi' // Ganti dengan kata sandi lisensi
     }
   ];
   
-  &lt;/script&gt;
-</code></pre>
+  </script>
+```
 <p>kode ini adalah kode yang digunakan sebagai pengecek lisensi, jika benar maka jalankan kode fitur tertentu, jika salah kita bisa kasih logika seperti redirect aja ke blog kamu</p>
-<pre><code class="javascript">
-&lt;script&gt;
-/*&lt;![CDATA[*/
+
+
+```Javascript
+<script>
+/*<![CDATA[*/
   function decrypt_hr(encrypted, password) {
     const decoded = atob(encrypted);
-    let decrypted = &#039;&#039;;
-    for (let i = 0; i &lt; decoded.length; i++) {
+    let decrypted = '';
+    for (let i = 0; i < decoded.length; i++) {
       decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ password.charCodeAt(i % password.length));
     }
     return decrypted;
   }
   function checkLisensi_hr(blogId) {
-    for (let i = 0; i &lt; lisensi_hr.length; i++) {
-      if (lisensi_hr[i].ownerLisensi !== &#039;Hirurshuji&#039;) {
-        console.log(&quot;Owner lisensi tidak terdaftar.&quot;);
+    for (let i = 0; i < lisensi_hr.length; i++) {
+      if (lisensi_hr[i].ownerLisensi !== 'Hirurshuji') {
+        console.log("Owner lisensi tidak terdaftar.");
         continue;
       }
       const decryptedBlogId_hr = decrypt_hr(lisensi_hr[i].lisensi, lisensi_hr[i].password);
       if (blogId === decryptedBlogId_hr) {
-        console.log(&quot;lisensi terdaftar.&quot;);
+        console.log("lisensi terdaftar.");
         // Lakukan sesuatu jika lisensi benar, misal jalankan kodenya
         
         return true;
       }
     }
-    console.log(&quot;lisensi tidak terdaftar atau owner lisensi tidak valid.&quot;);
+    console.log("lisensi tidak terdaftar atau owner lisensi tidak valid.");
     // Lakukan sesuatu jika lisensi salah, misal redirect ke blog kamu 
     
     return false;
   }
 
   const isLicensed_hr = checkLisensi_hr(cur_blog_id_hr);
-  /*]]&gt;*/
-&lt;/script&gt;
-</code></pre>
+  /*]]>*/
+</script>
+```
+
 <h3>Cara kerja kode di atas untuk memeriksa lisensi blog:</h3>
 <ul>
 <li>1. Ambil Blog ID:
