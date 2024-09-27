@@ -89,8 +89,5 @@ const lisensi_hr_password = "123456";// password lisensi disini
 
 
 <p>Kode ini akan memastikan bahwa Blog ID yang benar terenkripsi dengan benar dan dimiliki oleh "Hirutshuji" sebagai pemilik kode lisensinya.</p>
-
-<p>Untuk Fitur "Generate Lisensi" bersifat private, digithub..
-kirim link github untuk diinvite ke kodenya.</p>
   
 <a class="btn info" href="https://t.me/webhiru" target="_blank">Group Telegram</a>
