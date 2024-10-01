@@ -105,47 +105,8 @@
 <button id="copyBtn">Copy JSON</button>
 
 <script>
-function xorEncrypt(data, password) {
-    let encrypted = '';
-    for (let i = 0; i < data.length; i++) {
-        encrypted += String.fromCharCode(data.charCodeAt(i) ^ password.charCodeAt(i % password.length));
-    }
-    return btoa(encrypted);
-}
-
-function generateEncryptedJSON(blogID, domain, password, masterPassword) {
-    const encryptedDomain = xorEncrypt(domain, password);
-    const encryptedBlogID = xorEncrypt(blogID, password);
-    const encryptedPassword = xorEncrypt(password, masterPassword);
-    const jsonOutput = {
-        "blogID": blogID,
-        "domain": encryptedDomain,
-        "lisensi": encryptedBlogID,
-        "pswd": encryptedPassword 
-    };
-    return jsonOutput;
-}
-
-document.getElementById('jsonGeneratorForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const blogID = document.getElementById('blogID').value;
-    const domain = document.getElementById('domain').value;
-    const password = document.getElementById('password').value;
-    const masterPassword = "hirutshujix01Okt2024";
-    
-    const encryptedJSON = generateEncryptedJSON(blogID, domain, password, masterPassword);
-    document.getElementById('output').textContent = JSON.stringify(encryptedJSON, null, 2);
-});
-document.getElementById('copyBtn').addEventListener('click', function() {
-    const jsonOutput = document.getElementById('output').textContent;
-    const tempTextArea = document.createElement("textarea");
-    tempTextArea.value = jsonOutput;
-    document.body.appendChild(tempTextArea);
-    tempTextArea.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempTextArea);
-    alert("JSON berhasil disalin ke clipboard!");
-});
+function xorEncrypt(e,t){let n="";for(let r=0;r<e.length;r++)n+=String.fromCharCode(e.charCodeAt(r)^t.charCodeAt(r%t.length));return btoa(n)}function generateEncryptedJSON(e,t,n,r){let l=xorEncrypt(t,n),o=xorEncrypt(e,n),d=xorEncrypt(n,r);return{blogID:e,domain:l,lisensi:o,pswd:d}}document.getElementById("jsonGeneratorForm").addEventListener("submit",function(e){e.preventDefault();let t=document.getElementById("blogID").value,n=document.getElementById("domain").value,r=document.getElementById("password").value,l=generateEncryptedJSON(t,n,r,"hirutshujix01Okt2024");document.getElementById("output").textContent=JSON.stringify(l,null,2)}),document.getElementById("copyBtn").addEventListener("click",function(){let e=document.getElementById("output").textContent,t=document.createElement("textarea");t.value=e,document.body.appendChild(t),t.select(),document.execCommand("copy"),document.body.removeChild(t),alert("JSON berhasil disalin ke clipboard!")});
 </script>
+<script src='lisensi.js'></script>
 </body>
 </html>
