@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Generator</title>
+   
+    <meta itemprop="blogId" content="12345678910">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+    h2, h3 {
+        color: #333;
+        }
+
+        form#jsonGeneratorForm {
+            margin-bottom: 20px;
+        }
+
+       #jsonGeneratorForm label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        #jsonGeneratorForm input[type="text"],     #jsonGeneratorForm input[type="password"],     #jsonGeneratorForm input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #buatlisensi {
+            background-color: #000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .preJson {
+            background-color: #000;
+            color:#fff;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+        }
+
+        #copyBtn {
+            background-color: #000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #copyBtn:hover, #buatlisensi:hover  {
+            background-color: #007bb5;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Contoh JSON</h2>
+<pre class="preJson"><code>
+{
+  "1": {
+    "blogID": "12345678910",
+    "domain": "DAgGFFpdV1FdXxocXBddXVRHRVkcRxEaXA==",
+    "lisensi": "WVtBQQQEBAwMB1g=",
+    "pswd": "AAAAAEVBW0FfXw=="
+  },
+  "2": {
+    "blogID": "0987654",
+    "domain": "BAYRFF1aXEdB",
+    "lisensi": "WFBKQgcHBw==",
+    "pswd": "AAAAAEVBW0Ff"
+  }
+}
+</code></pre>
+
+<h2>Generator JSON Lisensi</h2>
+
+<form id="jsonGeneratorForm">
+    <label for="blogID">BlogID:</label>
+    <input type="number" id="blogID" required>
+
+    <label for="domain">Domain:</label>
+    <input type="text" id="domain" required>
+
+    <label for="password">Password (bebas tapi harap diingat aja):</label>
+    <input type="password" id="password" required>
+
+    <button id="buatlisensi" type="submit">Buat Lisensi</button>
+</form>
+
+<h3>Hasil JSON Lisensi:</h3>
+<pre class="preJson" id="output"></pre>
+
+<button id="copyBtn">Copy JSON</button>
+
+<script>
+function xorEncrypt(e,t){let n="";for(let r=0;r<e.length;r++)n+=String.fromCharCode(e.charCodeAt(r)^t.charCodeAt(r%t.length));return btoa(n)}function generateEncryptedJSON(e,t,n,r){let l=xorEncrypt(t,n),o=xorEncrypt(e,n),d=xorEncrypt(n,r);return{blogID:e,domain:l,lisensi:o,pswd:d}}document.getElementById("jsonGeneratorForm").addEventListener("submit",function(e){e.preventDefault();let t=document.getElementById("blogID").value,n=document.getElementById("domain").value,r=document.getElementById("password").value,l=generateEncryptedJSON(t,n,r,"hirutshujix01Okt2024");document.getElementById("output").textContent=JSON.stringify(l,null,2)}),document.getElementById("copyBtn").addEventListener("click",function(){let e=document.getElementById("output").textContent,t=document.createElement("textarea");t.value=e,document.body.appendChild(t),t.select(),document.execCommand("copy"),document.body.removeChild(t),alert("JSON berhasil disalin ke clipboard!")});
+</script>
+<script src='https://cdn.jsdelivr.net/gh/MagicReincarnation/Lisensi-Code@main/Lisensi%20database%20Github/lisensi.js'></script>
+</body>
+</html>
