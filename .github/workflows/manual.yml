@@ -22,15 +22,22 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y jq
 
+        # Fungsi untuk mendapatkan informasi file
+        get_file_info() {
+          file_path="$1"
+          created_at=$(stat -c %w "$file_path" 2>/dev/null || stat -c %y "$file_path")
+          updated_at=$(stat -c %y "$file_path")
+          size=$(stat -c %s "$file_path")
+          echo "\"created_at\": \"$created_at\", \"updated_at\": \"$updated_at\", \"size\": $size"
+        }
+
         # Iterasi file dan folder
         folder_structure=$(find . -type d ! -path "./.git*" -print0 | while IFS= read -r -d '' folder; do
-          echo "{\"name\": \"$(basename "$folder")\", \"path\": \"${folder#./}\", \"sha\": \"$(git log -1 --format=%H -- "$folder")\", \"size\": 0, \"url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"html_url\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\", \"git_url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"download_url\": null, \"type\": \"dir\", \"_links\": {\"self\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"git\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"html\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\"}},"
+          echo "{\"name\": \"$(basename "$folder")\", \"path\": \"${folder#./}\", \"type\": \"dir\", $(get_file_info "$folder")},"
         done)
 
         files_structure=$(find . -type f ! -path "./.git*" -print0 | while IFS= read -r -d '' file; do
-          size=$(stat -c %s "$file")
-          sha=$(git log -1 --format=%H -- "$file")
-          echo "{\"name\": \"$(basename "$file")\", \"path\": \"${file#./}\", \"sha\": \"$sha\", \"size\": $size, \"url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${file#./}?ref=main\", \"html_url\": \"https://github.com/${GITHUB_REPOSITORY}/blob/main/${file#./}\", \"git_url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/$sha\", \"download_url\": \"https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/${file#./}\", \"type\": \"file\", \"_links\": {\"self\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${file#./}?ref=main\", \"git\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/$sha\", \"html\": \"https://github.com/${GITHUB_REPOSITORY}/blob/main/${file#./}\"}},"
+          echo "{\"name\": \"$(basename "$file")\", \"path\": \"${file#./}\", \"type\": \"file\", $(get_file_info "$file")},"
         done)
 
         # Gabungkan JSON
