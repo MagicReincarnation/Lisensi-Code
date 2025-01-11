@@ -22,9 +22,14 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y jq
 
+        # Fungsi untuk mendapatkan tanggal modifikasi terakhir folder
+        get_last_modified_date() {
+            find "$1" -type f -exec git log -1 --format="%ci" {} \; | sort -r | head -n 1
+        }
+
         # Iterasi file dan folder
         folder_structure=$(find . -type d ! -path "./.git*" -print0 | while IFS= read -r -d '' folder; do
-          updated_at=$(git log -1 --format=%ci -- "$folder")
+          updated_at=$(get_last_modified_date "$folder")
           echo "{\"name\": \"$(basename "$folder")\", \"path\": \"${folder#./}\", \"sha\": \"$(git log -1 --format=%H -- "$folder")\", \"size\": 0, \"url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"html_url\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\", \"git_url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"download_url\": null, \"type\": \"dir\", \"updated_at\": \"$updated_at\", \"_links\": {\"self\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"git\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"html\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\"}},"
         done)
 
