@@ -22,20 +22,15 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y jq
 
-        # Iterasi folder
+        # Iterasi file dan folder
         folder_structure=$(find . -type d ! -path "./.git*" -print0 | while IFS= read -r -d '' folder; do
-          created_at=$(git log --diff-filter=A --format="%aI" -- "$folder" | tail -1)
-          updated_at=$(git log -1 --format="%aI" -- "$folder")
-          echo "{\"name\": \"$(basename "$folder")\", \"path\": \"${folder#./}\", \"sha\": \"$(git log -1 --format=%H -- "$folder")\", \"size\": 0, \"created_at\": \"$created_at\", \"updated_at\": \"$updated_at\", \"url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"html_url\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\", \"git_url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"download_url\": null, \"type\": \"dir\", \"_links\": {\"self\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"git\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"html\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\"}},"
+          echo "{\"name\": \"$(basename "$folder")\", \"path\": \"${folder#./}\", \"sha\": \"$(git log -1 --format=%H -- "$folder")\", \"size\": 0, \"url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"html_url\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\", \"git_url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"download_url\": null, \"type\": \"dir\", \"_links\": {\"self\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${folder#./}?ref=main\", \"git\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/trees/$(git rev-parse HEAD):${folder#./}\", \"html\": \"https://github.com/${GITHUB_REPOSITORY}/tree/main/${folder#./}\"}},"
         done)
 
-        # Iterasi file
         files_structure=$(find . -type f ! -path "./.git*" -print0 | while IFS= read -r -d '' file; do
           size=$(stat -c %s "$file")
           sha=$(git log -1 --format=%H -- "$file")
-          created_at=$(git log --diff-filter=A --format="%aI" -- "$file" | tail -1)
-          updated_at=$(git log -1 --format="%aI" -- "$file")
-          echo "{\"name\": \"$(basename "$file")\", \"path\": \"${file#./}\", \"sha\": \"$sha\", \"size\": $size, \"created_at\": \"$created_at\", \"updated_at\": \"$updated_at\", \"url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${file#./}?ref=main\", \"html_url\": \"https://github.com/${GITHUB_REPOSITORY}/blob/main/${file#./}\", \"git_url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/$sha\", \"download_url\": \"https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/${file#./}\", \"type\": \"file\", \"_links\": {\"self\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${file#./}?ref=main\", \"git\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/$sha\", \"html\": \"https://github.com/${GITHUB_REPOSITORY}/blob/main/${file#./}\"}},"
+          echo "{\"name\": \"$(basename "$file")\", \"path\": \"${file#./}\", \"sha\": \"$sha\", \"size\": $size, \"url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${file#./}?ref=main\", \"html_url\": \"https://github.com/${GITHUB_REPOSITORY}/blob/main/${file#./}\", \"git_url\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/$sha\", \"download_url\": \"https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/${file#./}\", \"type\": \"file\", \"_links\": {\"self\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${file#./}?ref=main\", \"git\": \"https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/$sha\", \"html\": \"https://github.com/${GITHUB_REPOSITORY}/blob/main/${file#./}\"}},"
         done)
 
         # Gabungkan JSON
